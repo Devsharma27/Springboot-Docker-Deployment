@@ -9,22 +9,21 @@ node {
             // Get some code from a GitHub repository
             git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-demodeploy.git'
           }
-          // stage('Compile-package'){
-          //   // get maven home path
-          //   def mvnHome = tool name: 'maven-3_8_6', type: 'maven'
-          //   bat "${mvnHome}/bin/mvn package"
-          // }
-          
-          // stage('Quality Gate Status Check'){
-          //   def mnvHome = tool name: 'maven-3_8_6', type: 'maven'
-          //   withSonarQubeEnv('sonar-6'){
-          //     bat "${mvnHome}/bin/mvn sonar:sonar"
-          //   }
-          // }
-          stage('Sonarqube-Analysis'){
-              withSonarQubeEnv('SonarQube'){
-                sh "./qube sonarqube"
-            }
+          stage('SonarQube Analysis') {
+            def scannerHome = tool 'sonarqube'
+              withSonarQubeEnv('sonar-6') {
+              sh """/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonarqube/bin/sonar-scanner \
+              -D sonar.projectVersion=1.0-SNAPSHOT \
+                -D sonar.login=admin \
+                -D sonar.password=Dev.sharma@8989 \
+                -D sonar.projectBaseDir=C:/ProgramData/Jenkins/.jenkins/workspace/testing \
+                  -D sonar.projectKey=project \
+                  -D sonar.sourceEncoding=UTF-8 \
+                  -D sonar.language=java \
+                  -D sonar.sources=project/src/main \
+                  -D sonar.tests=project/src/test \
+                  -D sonar.host.url=http://localhost:9000/"""
+                  }
           }
 
           stage('Build docker') {
