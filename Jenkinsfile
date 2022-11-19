@@ -15,13 +15,24 @@ node {
       def mvnhome = tool name: 'MAVEN_HOME', type: 'maven'
       bat "${mvnhome}/bin/mvn package"
     }
-            
-    stage('SonarQube Analysis') {
-      def mvnhome = tool name: 'MAVEN_HOME', type: 'maven'
-      withSonarQubeEnv('sonarqube-token') {
-        bat "${mvnHome}/bin/mvn sonar:sonar"
-      }
-    }
+
+    stage('SonarQube analysis') {
+		steps{
+			script{
+				scannerHome = tool 'SonarRunner_4.7.0';
+			}
+			withSonarQubeEnv('sonarqube-token') {
+					bat "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=Jurisprudencia_ORCTXT -Dsonar.sources=. -Dsonar.login=sqp_6f5ca85c5600080f204387f22e680a31f5c784b9"
+			}
+		}
+	}
+    
+    // stage('SonarQube Analysis') {
+    //   def mvnhome = tool name: 'MAVEN_HOME', type: 'maven'
+    //   withSonarQubeEnv('sonarqube-token') {
+    //     bat "${mvnHome}/bin/mvn sonar:sonar"
+    //   }
+    // }
           
     stage('Build docker') {
       dockerImage = docker.build("sonarqube-deploy:${env.BUILD_NUMBER}")
