@@ -1,14 +1,15 @@
 node {
-    def WORKSPACE = "C:/ProgramData/Jenkins/.jenkins/workspace/sonarqube-testing>"
-    def dockerImageTag = "sonarqube-testing${env.BUILD_NUMBER}"
+  def WORKSPACE = "C:/ProgramData/Jenkins/.jenkins/workspace/sonarqube-testing>"
+  def dockerImageTag = "sonarqube-testing${env.BUILD_NUMBER}"
 
-    try{
-//          notifyBuild('STARTED')
-          stage('Clone Repo') {
-            // for display purposes
-            // Get some code from a GitHub repository
-            git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-demodeploy.git'
-          }
+  try{
+    // notifyBuild('STARTED')
+    stage('Clone Repo') {
+      // for display purposes
+      // Get some code from a GitHub repository
+      git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-demodeploy.git'
+      }
+
       //     stage('quality-check'){
       //       withSonarQubeEnv(credentialsId: 'spring-boot-tk',installationName: 'Sonarqube') {
       //       // some block
@@ -22,32 +23,34 @@ node {
       //     //    }
       //     //   }
 
-          stage('Compile-Package'){
-            //get maven home path 
-            def mvnhome = tool name: 'MAVEN_HOME', type: 'maven'
-            bat "${mvnhome}/bin/mvn package"
-            }
+    stage('Compile-Package'){
+      //get maven home path 
+      def mvnhome = tool name: 'MAVEN_HOME', type: 'maven'
+      bat "${mvnhome}/bin/mvn package"
+      }
             
-            stage('SonarQube Analysis') {
-            def mvnhome = tool name: 'MAVEN_HOME', type: 'maven'
-            withSonarQubeEnv('sonarqube') {
-            bat "${mvnHome}/bin/mvn sonar:sonar"
-            }
-          }
-          stage('Build docker') {
-                 dockerImage = docker.build("sonarqube-deploy:${env.BUILD_NUMBER}")
-          }
+    stage('SonarQube Analysis') {
+      def mvnhome = tool name: 'MAVEN_HOME', type: 'maven'
+      withSonarQubeEnv(credentialsId: 'spring-boot-tk') {
+        bat "${mvnHome}/bin/mvn sonar:sonar"
+        }
+      }
+          
+    stage('Build docker') {
+      dockerImage = docker.build("sonarqube-deploy:${env.BUILD_NUMBER}")
+      }
 
-          stage('Deploy docker'){
-                  echo "Docker Image Tag Name: ${dockerImageTag}"
-                  bat "docker stop sonarqube-deploy || (exit 0) && docker rm sonarqube-deploy || (exit 0)"
-                  bat "docker run --name sonarqube-deploy -d -p 8081:8081 sonarqube-deploy:${env.BUILD_NUMBER}"
-          }
-    }catch(e){
-//         currentBuild.result = "FAILED"
-        throw e
+      stage('Deploy docker'){
+        echo "Docker Image Tag Name: ${dockerImageTag}"
+        bat "docker stop sonarqube-deploy || (exit 0) && docker rm sonarqube-deploy || (exit 0)"
+        bat "docker run --name sonarqube-deploy -d -p 8081:8081 sonarqube-deploy:${env.BUILD_NUMBER}"
+        }
+  }catch(e){
+
+//currentBuild.result = "FAILED"
+    throw e
     }finally{
-//         notifyBuild(currentBuild.result)
+//notifyBuild(currentBuild.result)
     }
 }
 
