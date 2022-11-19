@@ -12,7 +12,7 @@ node {
           stage('SonarQube Analysis') {
             def scannerHome = tool 'sonarqube'
               withSonarQubeEnv('sonarqube-server') {
-                    bat" ${SCANNER_HOME}}/bin/sonar-scanner \
+                    bat"/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonarqube/bin/sonar-scanner \
                     -Dsonar.projectKey=simple_webapp \
                     -Dsonar.sources=. "
           }
