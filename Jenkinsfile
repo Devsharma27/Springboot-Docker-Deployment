@@ -17,7 +17,7 @@ node {
              }
           // environment {
           //     Docker_tag = getDockerTag()
-          }
+          // }
             stage('Quality Gate Status Check'){
                   steps{
                       script{
