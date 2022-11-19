@@ -11,19 +11,10 @@ node {
           }
           stage('SonarQube Analysis') {
             def scannerHome = tool 'sonarqube'
-              withSonarQubeEnv('sonarqube-token') {
-              bat """/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonarqube/bin/sonar-scanner \
-              -D sonar.projectVersion=spring-boot-tk \
-                -D sonar.login=admin \
-                -D sonar.password=Dev.sharma@8989 \
-                -D sonar.projectBaseDir=C:/ProgramData/Jenkins/.jenkins/workspace/testing \
-                  -D sonar.projectKey=project \
-                  -D sonar.sourceEncoding=UTF-8 \
-                  -D sonar.language=java \
-                  -D sonar.sources=src/main \
-                  -D sonar.tests=src/test \
-                  -D sonar.host.url=http://localhost:9000/"""
-                  }
+              withSonarQubeEnv('sonarqube-server') {
+                    bat" ${SCANNER_HOME}}/bin/sonar-scanner \
+                    -Dsonar.projectKey=simple_webapp \
+                    -Dsonar.sources=. "
           }
           stage('Quality Gate 1') {
             waitForQualityGate abortPipeline: true
