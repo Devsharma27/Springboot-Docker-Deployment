@@ -1,22 +1,39 @@
 node {
-    def WORKSPACE = "C:/ProgramData/Jenkins/.jenkins/workspace/springboot-demodeploy>"
-    def dockerImageTag = "springboot-deploy${env.BUILD_NUMBER}"
+    def WORKSPACE = "C:/ProgramData/Jenkins/.jenkins/workspace/sonarqube-testing>"
+    def dockerImageTag = "sonarqube-testing${env.BUILD_NUMBER}"
 
     try{
 //          notifyBuild('STARTED')
-         stage('Clone Repo') {
+          stage('Clone Repo') {
             // for display purposes
             // Get some code from a GitHub repository
             git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-demodeploy.git'
-         }
+          }
+          stage('Quality Gate Status Check'){
+                  steps{
+                      script{
+			      withSonarQubeEnv('sonarserver') { 
+			      bat "mvn sonar:sonar"
+                       	     	}
+			      timeout(time: 1, unit: 'HOURS') {
+			      def qg = waitForQualityGate()
+				      if (qg.status != 'OK') {
+					   error "Pipeline aborted due to quality gate failure: ${qg.status}"
+				      }
+                    		}
+		    	    bat "mvn clean install"
+		  
+                 	}
+               	 }  
+              }
           stage('Build docker') {
-                 dockerImage = docker.build("springboot-deploy:${env.BUILD_NUMBER}")
+                 dockerImage = docker.build("sonarqube-deploy:${env.BUILD_NUMBER}")
           }
 
           stage('Deploy docker'){
                   echo "Docker Image Tag Name: ${dockerImageTag}"
-                  bat "docker stop springboot-deploy || (exit 0) && docker rm springboot-deploy || (exit 0)"
-                  bat "docker run --name springboot-deploy -d -p 8081:8081 springboot-deploy:${env.BUILD_NUMBER}"
+                  bat "docker stop sonarqube-deploy || (exit 0) && docker rm sonarqube-deploy || (exit 0)"
+                  bat "docker run --name sonarqube-deploy -d -p 8081:8081 sonarqube-deploy:${env.BUILD_NUMBER}"
           }
     }catch(e){
 //         currentBuild.result = "FAILED"
@@ -45,7 +62,7 @@ def notifyBuild(String buildStatus = 'STARTED'){
 
   // Email notification
     emailext (
-         to: "admin@gmail.com",
+         to: "dev.sharma8989@gmail.com",
          subject: subject_email,
          body: details,
          recipientProviders: [[$class: 'DevelopersRecipientProvider']]
