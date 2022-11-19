@@ -13,7 +13,7 @@ node {
     stage('Compile-Package'){
       //get maven home path 
       def mvnhome = tool name: 'MAVEN_HOME', type: 'maven'
-      bat "${mvnhome}/bin/mvn -X package"
+      bat "${mvnhome}/bin/mvn package"
     }
 
     stage('SonarQube analysis') {
