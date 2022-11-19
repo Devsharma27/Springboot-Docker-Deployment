@@ -10,7 +10,7 @@ node {
             git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-demodeploy.git'
           }
           stage("quality-check"){
-            withSonarQubeEnv(credentialsId: 'spring-boot-tk') {
+            withSonarQubeEnv(credentialsId: 'spring-boot-tk',installationName: 'Sonarqube') {
             // some block
           }
           }
