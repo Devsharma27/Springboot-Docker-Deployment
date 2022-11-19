@@ -10,11 +10,11 @@ node {
       git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-Docker-Deployment.git'
     }
 
-    // stage('Compile-Package'){
-    //   //get maven home path 
-    //   def mvnhome = tool name: 'MAVEN_HOME', type: 'maven'
-    //   bat "${mvnhome}/bin/mvn package"
-    // }
+    stage('Compile-Package'){
+      //get maven home path 
+      def mvnhome = tool name: 'MAVEN_HOME', type: 'maven'
+      bat "${mvnhome}/bin/mvn package"
+    }
 
     stage('SonarQube analysis') {
 			scannerHome = tool 'sonarqube';
