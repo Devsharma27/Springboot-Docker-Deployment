@@ -22,18 +22,18 @@ node {
       //     //    }
       //     //   }
 
-      //     stage("Quality Gate"){
-      //       timeout(time: 1, unit: 'HOURS') {
-      //         def qg = waitForQualityGate()
-      //         if (qg.status != 'OK') {
-      //             error "Pipeline aborted due to quality gate failure: ${qg.status}"
-      //         }
-      //     }
-      // }
-          stage("Building SONAR ...") {
-            sh './gradlew clean sonarqube'
+          stage('Compile-Package'){
+            //get maven home path 
+            def mvnhome = tool name: 'maven-3', type: 'maven'
+            bat "${mvnhome}/bin/mvn package"
+            }
+            
+            stage('SonarQube Analysis') {
+            def mvnhome = tool name: 'maven-3', type: 'maven'
+            withSonarQubeEnv('sonarqube') {
+            bat "${mvnHome}/bin/mvn sonar:sonar"
+            }
           }
-          
           stage('Build docker') {
                  dockerImage = docker.build("sonarqube-deploy:${env.BUILD_NUMBER}")
           }
