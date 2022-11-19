@@ -1,3 +1,4 @@
+// Change and check the necessary parameters
 node {
   def WORKSPACE = "C:/ProgramData/Jenkins/.jenkins/workspace/sonarqube-testing>"
   def dockerImageTag = "sonarqube-testing${env.BUILD_NUMBER}"
@@ -17,11 +18,13 @@ node {
     }
 
     stage('SonarQube analysis') {
-			scannerHome = tool 'sonarqube';
+      //SonarQube Scanner installations Name should be pasted correctly
+			scannerHome = tool 'sonarqube';  
 			}
-			withSonarQubeEnv('sonarqube-token') {
-					bat "${scannerHome}/bin/sonar-scanner -X -Dsonar.host.url=http://localhost:9000 -Dsonar.projectKey=spring-boot-tk -Dsonar.sources=. "
-		}
+			withSonarQubeEnv('sonarqube-token') { //SonarQube scanner ''Enveronment Name''' should be pasted correctly
+        //check the "https://docs.sonarqube.org/7.4/analysis/analysis-parameters/" for necessary perameters
+				bat "${scannerHome}/bin/sonar-scanner -X -Dsonar.host.url=http://localhost:9000 -Dsonar.projectKey=spring-boot-tk -Dsonar.sources=. "
+			}
           
     stage('Build docker') {
       dockerImage = docker.build("sonarqube-deploy:${env.BUILD_NUMBER}")
