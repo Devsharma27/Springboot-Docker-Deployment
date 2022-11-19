@@ -9,16 +9,23 @@ node {
             // Get some code from a GitHub repository
             git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-demodeploy.git'
           }
-          stage('Compile-package'){
-            // get maven home path
-            def mvnHome = tool name: 'maven-3_8_6', type: 'maven'
-            bat "${mvnHome}/bin/mvn package"
-          }
+          // stage('Compile-package'){
+          //   // get maven home path
+          //   def mvnHome = tool name: 'maven-3_8_6', type: 'maven'
+          //   bat "${mvnHome}/bin/mvn package"
+          // }
           
-          stage('Quality Gate Status Check'){
-            def mnvHome = tool name: 'maven-3_8_6', type: 'maven'
-            withSonarQubeEnv('sonar-6'){
-              bat "${mvnHome}/bin/mvn sonar:sonar"
+          // stage('Quality Gate Status Check'){
+          //   def mnvHome = tool name: 'maven-3_8_6', type: 'maven'
+          //   withSonarQubeEnv('sonar-6'){
+          //     bat "${mvnHome}/bin/mvn sonar:sonar"
+          //   }
+          // }
+          stage('Sonarqube-Analysis'){
+            steps{
+              withSonarQubeEnv('SonarQube'){
+                sh "./gradlew sonarqube"
+              }
             }
           }
 
