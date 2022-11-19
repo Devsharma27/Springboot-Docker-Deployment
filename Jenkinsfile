@@ -9,7 +9,16 @@ node {
             // Get some code from a GitHub repository
             git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-demodeploy.git'
           }
-          stage('Quality Gate Status Check'){
+          agent {
+                docker {
+                image 'maven'
+                args '-v $HOME/.m2:/root/.m2'
+                }
+             }
+          // environment {
+          //     Docker_tag = getDockerTag()
+          }
+            stage('Quality Gate Status Check'){
                   steps{
                       script{
 			      withSonarQubeEnv('sonarserver') { 
