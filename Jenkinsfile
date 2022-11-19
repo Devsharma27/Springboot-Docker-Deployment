@@ -24,13 +24,13 @@ node {
 		}
           
     stage('Build docker') {
-      dockerImage = docker.build("sonarqube-test-deploy:${env.BUILD_NUMBER}")
+      dockerImage = docker.build("sonarqube-deploy:${env.BUILD_NUMBER}")
     }
 
     stage('Deploy docker'){
         echo "Docker Image Tag Name: ${dockerImageTag}"
-        bat "docker stop sonarqube-test-deploy || (exit 0) && docker rm sonarqube-test-deploy || (exit 0)"
-        bat "docker run --name sonarqube-test-deploy -d -p 8081:8081 sonarqube-test-deploy:${env.BUILD_NUMBER}"
+        bat "docker stop sonarqube-deploy || (exit 0) && docker rm sonarqube-deploy || (exit 0)"
+        bat "docker run --name sonarqube-deploy -d -p 8081:8081 sonarqube-deploy:${env.BUILD_NUMBER}"
     }
   }catch(e){
 
