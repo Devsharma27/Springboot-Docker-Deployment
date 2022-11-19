@@ -9,18 +9,18 @@ node {
             // Get some code from a GitHub repository
             git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-demodeploy.git'
           }
-          // stage("quality-check"){
-          //   withSonarQubeEnv(credentialsId: 'spring-boot-tk') {
-          //   // some block
-          // }
-          // }
-          stage("build & SonarQube analysis") {
-          node {
-              withSonarQubeEnv(credentialsId: 'spring-boot-tk') {
-                 bat 'mvn clean package sonar:sonar'
-              }
-             }
-            }
+          stage("quality-check"){
+            withSonarQubeEnv(credentialsId: 'spring-boot-tk') {
+            // some block
+          }
+          }
+          // stage("build & SonarQube analysis") {
+          // node {
+          //     withSonarQubeEnv(credentialsId: 'spring-boot-tk') {
+          //        bat 'mvn clean package sonar:sonar'
+          //     }
+          //    }
+          //   }
 
           stage("Quality Gate"){
             timeout(time: 1, unit: 'HOURS') {
