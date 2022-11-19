@@ -13,7 +13,7 @@ node {
             def scannerHome = tool 'sonarqube'
               withSonarQubeEnv('sonarqube-token') {
               bat """/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonarqube/bin/sonar-scanner \
-              -D sonar.projectVersion=1.0-SNAPSHOT \
+              -D sonar.projectVersion=spring-boot-tk \
                 -D sonar.login=admin \
                 -D sonar.password=Dev.sharma@8989 \
                 -D sonar.projectBaseDir=C:/ProgramData/Jenkins/.jenkins/workspace/testing \
