@@ -12,10 +12,9 @@ node {
           stage('SonarQube Analysis') {
             def scannerHome = tool 'sonarqube'
               withSonarQubeEnv('sonarqube-server') {
-                    bat"/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonarqube/bin/sonar-scanner \
+                    sh" ${SCANNER_HOME}}/bin/sonar-scanner \
                     -Dsonar.projectKey=simple_webapp \
                     -Dsonar.sources=. "
-          }
           }
           stage('Quality Gate 1') {
             waitForQualityGate abortPipeline: true
