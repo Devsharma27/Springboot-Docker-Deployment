@@ -3,6 +3,7 @@ node {
     def dockerImageTag = "sonarqube-testing${env.BUILD_NUMBER}"
 
     try{
+        stages{
 //          notifyBuild('STARTED')
           stage('Clone Repo') {
             // for display purposes
@@ -50,6 +51,7 @@ node {
     }finally{
 //         notifyBuild(currentBuild.result)
     }
+}
 }
 
 def notifyBuild(String buildStatus = 'STARTED'){
