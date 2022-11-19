@@ -25,7 +25,9 @@ node {
                   -D sonar.host.url=http://localhost:9000/"""
                   }
           }
-
+          stage(“Quality Gate 1”) {
+            waitForQualityGate abortPipeline: true
+            }
           stage('Build docker') {
                  dockerImage = docker.build("sonarqube-deploy:${env.BUILD_NUMBER}")
           }
