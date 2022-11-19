@@ -20,8 +20,8 @@ node {
                   -D sonar.projectKey=project \
                   -D sonar.sourceEncoding=UTF-8 \
                   -D sonar.language=java \
-                  -D sonar.sources=project/src/main \
-                  -D sonar.tests=project/src/test \
+                  -D sonar.sources=src/main \
+                  -D sonar.tests=src/test \
                   -D sonar.host.url=http://localhost:9000/"""
                   }
           }
