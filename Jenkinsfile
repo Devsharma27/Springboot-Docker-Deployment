@@ -7,19 +7,26 @@ node {
           stage('Clone Repo') {
             // for display purposes
             // Get some code from a GitHub repository
-            git branch: 'main', url: 'https://github.com/Devsharma27/sonarqube-testing.git'
+            git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-demodeploy.git'
           }
-          stage('SonarQube Analysis') {
-            def scannerHome = tool 'sonarqube'
-              withSonarQubeEnv('sonarqube-server') {
-                    sh" ${SCANNER_HOME}}/bin/sonar-scanner \
-                    -Dsonar.projectKey=simple_webapp \
-                    -Dsonar.sources=. "
-          }
-          }
-          stage('Quality Gate 1') {
-            waitForQualityGate abortPipeline: true
-            }
+          
+          stage('Quality Gate Status Check'){
+                  steps{
+                      script{
+			      withSonarQubeEnv('sonarqube-token') { 
+			      bat "mvn sonar:sonar"
+                       	     	}
+			      timeout(time: 1, unit: 'HOURS') {
+			      def qg = waitForQualityGate()
+				      if (qg.status != 'OK') {
+					   error "Pipeline aborted due to quality gate failure: ${qg.status}"
+				      }
+                    		}
+		    	    bat "mvn clean install"
+		  
+                 	}
+               	 }  
+              }
           stage('Build docker') {
                  dockerImage = docker.build("sonarqube-deploy:${env.BUILD_NUMBER}")
           }
