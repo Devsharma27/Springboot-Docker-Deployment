@@ -17,7 +17,7 @@ node {
           stage("build & SonarQube analysis") {
           node {
               withSonarQubeEnv(credentialsId: 'spring-boot-tk') {
-                 sh 'mvn clean package sonar:sonar'
+                 bat 'mvn clean package sonar:sonar'
               }
              }
             }
