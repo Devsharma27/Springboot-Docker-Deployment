@@ -22,10 +22,8 @@ node {
           //   }
           // }
           stage('Sonarqube-Analysis'){
-            steps{
               withSonarQubeEnv('SonarQube'){
                 sh "./gradlew sonarqube"
-              }
             }
           }
 
