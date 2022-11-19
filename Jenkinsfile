@@ -7,7 +7,7 @@ node {
           stage('Clone Repo') {
             // for display purposes
             // Get some code from a GitHub repository
-            git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-demodeploy.git'
+            git branch: 'main', url: 'https://github.com/Devsharma27/sonarqube-testing.git'
           }
           stage('SonarQube Analysis') {
             def scannerHome = tool 'sonarqube'
