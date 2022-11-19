@@ -20,7 +20,7 @@ node {
 			scannerHome = tool 'sonarqube';
 			}
 			withSonarQubeEnv('sonarqube-token') {
-					bat "${scannerHome}/bin/sonar-scanner -X -Dsonar.host.url=https://sonarcloud.io/ -Dsonar.organization=Devsharma27 -Dsonar.projectKey=sonarqube-testing -Dsonar.sources=. -Dsonar.login=sqp_6f5ca85c5600080f204387f22e680a31f5c784b9"
+					bat "${scannerHome}/bin/sonar-scanner -X -Dsonar.host.url=https://sonarcloud.io/ -Dsonar.organization=Devsharma27 -Dsonar.projectKey=spring-boot-tk -Dsonar.sources=. -Dsonar.login=sqp_6f5ca85c5600080f204387f22e680a31f5c784b9"
 			}
     
     // stage('SonarQube Analysis') {
