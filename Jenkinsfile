@@ -9,32 +9,19 @@ node {
             // Get some code from a GitHub repository
             git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-demodeploy.git'
           }
-          agent {
-                docker {
-                image 'maven'
-                args '-v $HOME/.m2:/root/.m2'
-                }
-             }
-          // environment {
-          //     Docker_tag = getDockerTag()
-          // }
-            stage('Quality Gate Status Check'){
-                  steps{
-                      script{
-			      withSonarQubeEnv('sonarserver') { 
-			      bat "mvn sonar:sonar"
-                       	     	}
-			      timeout(time: 1, unit: 'HOURS') {
-			      def qg = waitForQualityGate()
-				      if (qg.status != 'OK') {
-					   error "Pipeline aborted due to quality gate failure: ${qg.status}"
-				      }
-                    		}
-		    	    bat "mvn clean install"
-		  
-                 	}
-               	 }  
-              }
+          stage('Compile-package'){
+            // get maven home path
+            def mvnHome = tool name: 'maven-3', type: 'maven'
+            bat "${mvnHome}/bin/mvn package"
+          }
+          
+          stage('Quality Gate Status Check'){
+            def mnvHome = tool name: 'maven-3', type: 'maven'
+            withSonarQubeEnv('sonar-6'){
+              bat "${mvnHome}/bin/mvn sonar:sonar"
+            }
+          }
+
           stage('Build docker') {
                  dockerImage = docker.build("sonarqube-deploy:${env.BUILD_NUMBER}")
           }
