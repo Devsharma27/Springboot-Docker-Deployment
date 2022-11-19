@@ -31,7 +31,7 @@ node {
             
     stage('SonarQube Analysis') {
       def mvnhome = tool name: 'MAVEN_HOME', type: 'maven'
-      withSonarQubeEnv(credentialsId: 'spring-boot-tk') {
+      withSonarQubeEnv('sonarqube-token') {
         bat "${mvnHome}/bin/mvn sonar:sonar"
         }
       }
