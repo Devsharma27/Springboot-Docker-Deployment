@@ -9,27 +9,30 @@ node {
             // Get some code from a GitHub repository
             git branch: 'main', url: 'https://github.com/Devsharma27/Springboot-demodeploy.git'
           }
-          stage("quality-check"){
-            withSonarQubeEnv(credentialsId: 'spring-boot-tk',installationName: 'Sonarqube') {
-            // some block
-          }
-          }
-          // stage("build & SonarQube analysis") {
-          // node {
-          //     withSonarQubeEnv(credentialsId: 'spring-boot-tk') {
-          //        bat 'mvn clean package sonar:sonar'
-          //     }
-          //    }
-          //   }
+      //     stage('quality-check'){
+      //       withSonarQubeEnv(credentialsId: 'spring-boot-tk',installationName: 'Sonarqube') {
+      //       // some block
+      //     }
+      //     }
+      //     // stage("build & SonarQube analysis") {
+      //     // node {
+      //     //     withSonarQubeEnv(credentialsId: 'spring-boot-tk') {
+      //     //        bat 'mvn clean package sonar:sonar'
+      //     //     }
+      //     //    }
+      //     //   }
 
-          stage("Quality Gate"){
-            timeout(time: 1, unit: 'HOURS') {
-              def qg = waitForQualityGate()
-              if (qg.status != 'OK') {
-                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
-              }
+      //     stage("Quality Gate"){
+      //       timeout(time: 1, unit: 'HOURS') {
+      //         def qg = waitForQualityGate()
+      //         if (qg.status != 'OK') {
+      //             error "Pipeline aborted due to quality gate failure: ${qg.status}"
+      //         }
+      //     }
+      // }
+          stage("Building SONAR ...") {
+            sh './gradlew clean sonarqube'
           }
-      }
           
           stage('Build docker') {
                  dockerImage = docker.build("sonarqube-deploy:${env.BUILD_NUMBER}")
