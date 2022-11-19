@@ -16,6 +16,7 @@ node {
                     -Dsonar.projectKey=simple_webapp \
                     -Dsonar.sources=. "
           }
+          }
           stage('Quality Gate 1') {
             waitForQualityGate abortPipeline: true
             }
