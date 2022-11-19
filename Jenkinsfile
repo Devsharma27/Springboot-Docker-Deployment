@@ -20,7 +20,7 @@ node {
 			scannerHome = tool 'sonarqube';
 			}
 			withSonarQubeEnv('sonarqube-token') {
-					bat "${scannerHome}/bin/sonar-scanner -X -Dsonar.host.url=http://localhost:9000 -Dsonar.projectKey=spring-boot-tk -Dsonar.sources=. "
+					bat "${scannerHome}/bin/sonar-scanner -X -Dsonar.host.url=http://localhost:9000 -Dsonar.projectKey=spring-boot-tk -Dsonar.sources=. -Dsonar.java.binaries="target"/>"
 		}
           
     stage('Build docker') {
