@@ -12,13 +12,13 @@ node {
           stage('Compile-package'){
             // get maven home path
             def mvnHome = tool name: 'maven-3', type: 'maven'
-            bat "${mvnHome}D:/apache-maven-3.8.6/bin/mvn package"
+            bat "${mvnHome}/bin/mvn package"
           }
           
           stage('Quality Gate Status Check'){
             def mnvHome = tool name: 'maven-3', type: 'maven'
             withSonarQubeEnv('sonar-6'){
-              bat "${mvnHome}D:/apache-maven-3.8.6/bin/mvn sonar:sonar"
+              bat "${mvnHome}/bin/mvn sonar:sonar"
             }
           }
 
